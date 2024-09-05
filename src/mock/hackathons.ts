@@ -1,10 +1,10 @@
 import { Hackathon } from "../types/types";
-import img1 from "../assets/cardImage/img1.png";
-import img2 from "../assets/cardImage/img2.png";
-import img3 from "../assets/cardImage/img3.png";
-import img4 from "../assets/cardImage/img4.png";
-import img5 from "../assets/cardImage/img5.png";
-import img6 from "../assets/cardImage/img6.png";
+import img1 from "../assets/cardimage/img1.png";
+import img2 from "../assets/cardimage/img2.png";
+import img3 from "../assets/cardimage/img3.png";
+import img4 from "../assets/cardimage/img4.png";
+import img5 from "../assets/cardimage/img5.png";
+import img6 from "../assets/cardimage/img6.png";
 
 export const hackathons: Hackathon[] = [
   {
