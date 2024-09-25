@@ -28,17 +28,17 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
   <div className="-mt-2 flex gap-2 font-bold">
     <div className="flex flex-col items-center gap-1">
       <span className="text-lg font-semibold">{days}</span>
-      <span className="text-extra text-xs">Days</span>
+      <span className="text-xs text-extra">Days</span>
     </div>
     :
     <div className="flex flex-col items-center gap-1">
       <span className="text-lg font-semibold">{hours}</span>
-      <span className="text-extra text-xs">Hours</span>
+      <span className="text-xs text-extra">Hours</span>
     </div>
     :
     <div className="flex flex-col items-center gap-1">
       <span className="text-lg font-semibold">{minutes}</span>
-      <span className="text-extra text-xs">Mins</span>
+      <span className="text-xs text-extra">Mins</span>
     </div>
   </div>
 );
@@ -83,15 +83,15 @@ const HackathonCard: React.FC<HackathonCardProps> = ({ item }) => {
       <img
         src={item.image}
         alt={item.name}
-        className="max-h-44 w-full object-cover"
+        className="aspect-video max-h-32 w-full object-cover"
       />
       <p
         className={clsx(
           "mx-auto mt-3 w-24 rounded-md px-2 py-px text-center text-sm font-medium tracking-tighter",
           {
-            "text-extra bg-[#f2c84c44]": isUpcoming,
+            "bg-[#f2c84c44] text-extra": isUpcoming,
             "bg-[#44924c51] text-[#44924c]": isActive,
-            "text-extra bg-[#ff3c0038]": isPast,
+            "bg-[#ff3c0038] text-extra": isPast,
           },
         )}
       >
@@ -100,7 +100,7 @@ const HackathonCard: React.FC<HackathonCardProps> = ({ item }) => {
       <h3 className="line-clamp-2 flex-1 px-6 text-center text-lg font-semibold leading-7 md:px-12">
         {item.name}
       </h3>
-      <p className="text-md text-extra font-medium">
+      <p className="text-md font-medium text-extra">
         {isUpcoming ? "Starts in" : isActive ? "Ends in" : "Ended on"}
       </p>
       {!isPast ? (
@@ -116,7 +116,7 @@ const HackathonCard: React.FC<HackathonCardProps> = ({ item }) => {
         disabled={isPast}
       >
         <img src={checkmark} alt="checkmark" className="h-auto w-4" />
-        <span className="text-md text-negative font-medium">
+        <span className="text-md font-medium text-negative">
           Participate Now
         </span>
       </button>

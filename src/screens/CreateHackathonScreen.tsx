@@ -5,7 +5,7 @@ import calendarIcon from "../assets/icons/calendar.svg";
 import { addHackathon, editHackathon } from "../store/hackathonsSlice";
 import { generateRandomAlphaNumericString } from "../utils/utils";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { RootState } from "../store/store";
 import { Hackathon, Level } from "../types/types";
 
@@ -13,6 +13,7 @@ const CreateHackathonScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
+  const isEditScreen = useLocation().pathname.includes("edit");
 
   const hackathons = useSelector(
     (state: RootState) => state.hackathons.hackathons,
@@ -34,9 +35,11 @@ const CreateHackathonScreen = () => {
       const hackathon = hackathons.find((hackathon) => hackathon.id === id);
       if (hackathon) {
         setHackathonDetails(hackathon);
+      } else {
+        navigate("/new-hackathon");
       }
     }
-  }, [id]);
+  }, [id, hackathons, navigate]);
 
   // Update hackathon details
   const updateHackathonDetails = (key: keyof Hackathon, value: string) => {
@@ -102,6 +105,10 @@ const CreateHackathonScreen = () => {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="px-8 py-12 md:px-24">
       <h2 className="text-2xl font-bold">Challenge Details</h2>
@@ -115,7 +122,7 @@ const CreateHackathonScreen = () => {
             type="text"
             name="name"
             id="name"
-            className="mt-5 w-full rounded-lg border-2 border-border px-6 py-2 md:max-w-96"
+            className="mt-5 w-full rounded-lg border-2 border-border bg-white px-6 py-2 md:max-w-96"
             onChange={(e) => updateHackathonDetails("name", e.target.value)}
           />
         </div>
@@ -136,8 +143,12 @@ const CreateHackathonScreen = () => {
               type="datetime-local"
               name="startDate"
               id="startDate"
-              className="absolute inset-0 opacity-0" // Use opacity instead of visibility to keep the input focusable
-              min={new Date().toISOString().slice(0, 16)}
+              className="absolute inset-0 opacity-0"
+              min={
+                isEditScreen
+                  ? hackathonDetails.startDate
+                  : new Date().toISOString().slice(0, 16)
+              }
               onChange={(e) =>
                 updateHackathonDetails("startDate", e.target.value)
               }
@@ -179,7 +190,7 @@ const CreateHackathonScreen = () => {
             value={hackathonDetails.description}
             name="description"
             id="description"
-            className="mt-5 min-h-72 w-full resize-none rounded-lg border-2 border-border px-4 py-4 md:max-w-[65%]"
+            className="mt-5 min-h-72 w-full resize-none rounded-lg border-2 border-border bg-white px-4 py-4 md:max-w-[65%]"
             onChange={(e) =>
               updateHackathonDetails("description", e.target.value)
             }
@@ -226,7 +237,7 @@ const CreateHackathonScreen = () => {
           <select
             name="level"
             id="level"
-            className="mt-5 w-full appearance-none rounded-lg border-2 border-border bg-[linear-gradient(45deg,transparent_50%,gray_50%),linear-gradient(135deg,gray_50%,transparent_50%),linear-gradient(to_right,#ccc,#ccc)] bg-[5px_5px,5px_5px,1px_1.5em] bg-[calc(100%_-_20px)_calc(1em_+_2px),calc(100%_-_15px)_calc(1em_+_2px),calc(100%_-_2.5em)_0.5em] bg-no-repeat px-4 py-2 md:max-w-64"
+            className="mt-5 w-full appearance-none rounded-lg border-2 border-border bg-white bg-[linear-gradient(45deg,transparent_50%,gray_50%),linear-gradient(135deg,gray_50%,transparent_50%),linear-gradient(to_right,#ccc,#ccc)] bg-[5px_5px,5px_5px,1px_1.5em] bg-[calc(100%_-_20px)_calc(1em_+_2px),calc(100%_-_15px)_calc(1em_+_2px),calc(100%_-_2.5em)_0.5em] bg-no-repeat px-4 py-2 md:max-w-64"
             value={hackathonDetails.level}
             onChange={handleLevelChange}
           >
@@ -237,7 +248,7 @@ const CreateHackathonScreen = () => {
         </div>
         <button
           type="submit"
-          className="text-negative mt-5 flex max-w-max items-center gap-4 self-end rounded-lg bg-accent px-8 py-2 text-lg font-medium md:self-start"
+          className="mt-5 flex max-w-max items-center gap-4 self-end rounded-lg bg-accent px-8 py-2 text-lg font-medium text-negative md:self-start"
         >
           {id ? "Save Changes" : "Create Challenge"}
         </button>

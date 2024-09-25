@@ -29,19 +29,17 @@ const HackathonsSection: React.FC = () => {
   });
 
   const getFilteredHackathons = () => {
-    const filteredHackathons = hackathons.filter((hackathon) => {
-      if (searchText) {
-        return (
-          hackathon.name.toLowerCase().includes(searchText.toLowerCase()) ||
-          hackathon.description.toLowerCase().includes(searchText.toLowerCase())
-        );
-      } else {
-        return true;
+    return hackathons.filter((hackathon) => {
+      // Search text filter
+      if (
+        searchText &&
+        !hackathon.name.toLowerCase().includes(searchText.toLowerCase()) &&
+        !hackathon.description.toLowerCase().includes(searchText.toLowerCase())
+      ) {
+        return false;
       }
-    });
 
-    // Filter by status
-    const statusedHackathons = filteredHackathons.filter((hackathon) => {
+      // Status filter
       const currentDate = new Date();
       const startDate = new Date(hackathon.startDate);
       const endDate = new Date(hackathon.endDate);
@@ -49,32 +47,39 @@ const HackathonsSection: React.FC = () => {
       const isActive = startDate <= currentDate && endDate >= currentDate;
       const isPast = endDate < currentDate;
 
-      if (filterOptions.status.All) {
-        return true;
-      } else {
-        if (filterOptions.status.Active && isActive) {
-          return true;
-        } else if (filterOptions.status.Upcoming && isUpcoming) {
-          return true;
-        } else if (filterOptions.status.Past && isPast) {
-          return true;
+      const statusSelected = Object.values(filterOptions.status).some(
+        (value) => value,
+      );
+      if (statusSelected) {
+        if (
+          (filterOptions.status.Active && isActive) ||
+          (filterOptions.status.Upcoming && isUpcoming) ||
+          (filterOptions.status.Past && isPast) ||
+          filterOptions.status.All
+        ) {
+          // Status filter passed
         } else {
           return false;
         }
       }
-    });
 
-    // Filter by level
-    return statusedHackathons.filter((hackathon) => {
-      if (filterOptions.level.Easy && hackathon.level === "Easy") {
-        return true;
-      } else if (filterOptions.level.Medium && hackathon.level === "Medium") {
-        return true;
-      } else if (filterOptions.level.Hard && hackathon.level === "Hard") {
-        return true;
-      } else {
-        return false;
+      // Level filter
+      const levelSelected = Object.values(filterOptions.level).some(
+        (value) => value,
+      );
+      if (levelSelected) {
+        if (
+          (filterOptions.level.Easy && hackathon.level === "Easy") ||
+          (filterOptions.level.Medium && hackathon.level === "Medium") ||
+          (filterOptions.level.Hard && hackathon.level === "Hard")
+        ) {
+          // Level filter passed
+        } else {
+          return false;
+        }
       }
+
+      return true;
     });
   };
 
@@ -97,7 +102,7 @@ const HackathonsSection: React.FC = () => {
   return (
     <section>
       <div className="bg-secondary px-12 py-20 lg:px-62">
-        <h2 className="text-negative text-center text-2xl font-semibold md:text-3xl">
+        <h2 className="text-center text-2xl font-semibold text-negative md:text-3xl">
           Explore Challenges
         </h2>
         <div className="mt-18 flex flex-col gap-6 md:flex-row">
@@ -119,7 +124,7 @@ const HackathonsSection: React.FC = () => {
             ))}
           </div>
         ) : (
-          <h3 className="text-negative min-h-64 text-center text-lg font-semibold">
+          <h3 className="min-h-64 text-center text-lg font-semibold text-negative">
             Looks like your search yielded no results.
           </h3>
         )}

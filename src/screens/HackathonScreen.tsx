@@ -113,12 +113,12 @@ const OptionsDropdown: React.FC<{
     <details ref={optionsRef} className="relative md:hidden">
       <summary className="flex list-none items-center gap-2 text-black">
         <img src={downIcon} alt="down" className="h-auto w-6" />
-        <span className="text-extra text-sm font-medium">Options</span>
+        <span className="text-sm font-medium text-extra">Options</span>
       </summary>
       <div className="absolute right-0 top-0 flex flex-col gap-2 rounded-lg border-2 bg-white p-2">
         <Link
           to={`/edit-hackathon/${hackathonId}`}
-          className="text-negative rounded-xl bg-green-700 px-8 py-2 font-semibold"
+          className="rounded-xl bg-green-700 px-8 py-2 font-semibold text-negative"
         >
           Edit
         </Link>
@@ -142,6 +142,12 @@ const HackathonScreen: React.FC = () => {
     (state: RootState) => state.hackathons.hackathons,
   );
   const hackathon = find(hackathons, { id: hackathonId }) as Hackathon;
+
+  // when the component mounts, scroll to the top of the page
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   if (!hackathon)
     return (
       <div className="flex h-screen flex-col items-center justify-center px-6 md:px-12">
@@ -187,10 +193,10 @@ const HackathonScreen: React.FC = () => {
           startDate={hackathon.startDate}
           endDate={hackathon.endDate}
         />
-        <h2 className="text-negative text-4.5xl font-bold tracking-wide">
+        <h2 className="text-4.5xl font-bold tracking-wide text-negative">
           {hackathon.name}
         </h2>
-        <span className="text-negative text-lg">{hackathon.description}</span>
+        <span className="text-lg text-negative">{hackathon.description}</span>
         <LevelIndicator level={hackathon.level} />
       </section>
       <section>
@@ -201,7 +207,7 @@ const HackathonScreen: React.FC = () => {
           <div className="hidden gap-4 md:flex">
             <Link
               to={`/edit-hackathon/${hackathon.id}`}
-              className="text-negative rounded-xl bg-green-700 px-8 py-2 font-semibold"
+              className="rounded-xl bg-green-700 px-8 py-2 font-semibold text-negative"
             >
               Edit
             </Link>
@@ -214,7 +220,7 @@ const HackathonScreen: React.FC = () => {
           </div>
           <OptionsDropdown hackathonId={hackathon.id} onDelete={handleDelete} />
         </header>
-        <p className="text-extra p-8 text-lg font-medium md:px-20 md:py-12 lg:pl-34 lg:pr-96">
+        <p className="p-8 text-lg font-medium text-extra md:px-20 md:py-12 lg:pl-34 lg:pr-96">
           {formattedOverview}
         </p>
       </section>
